@@ -18,12 +18,6 @@
   let yes = false;
 	let selection;
 
-
-/*firebase auth:import (__dirname, 'users.json') --hash-algo=scrypt --rounds=8 --mem-cost=14 --hash-key=dNyCqF0j9+Ci4Q6f0Aau2V2qEQ5luG0t0vhZtke++Xl5+zM9WTcxTy9/tzEPpl4ZdLkCe9SCdCGdNWZKQP9PSQ== --salt-separator=Bw== --project=turn-app-7261d
-firebase auth:import users.json --hash-algo=scrypt --rounds=8 --mem-cost=14 --hash-key=dNyCqF0j9+Ci4Q6f0Aau2V2qEQ5luG0t0vhZtke++Xl5+zM9WTcxTy9/tzEPpl4ZdLkCe9SCdCGdNWZKQP9PSQ== --salt-separator=Bw== --project=turn-app-7261d*/
-
-
-
 async function resetPassWord(email){
   if (yes===true){
   await UIkit.modal.confirm('Se enviara un email para restablecer la contraseña.').then(function() {
