@@ -44,7 +44,9 @@ const formatter = new Intl.DateTimeFormat('en', {
 		second: '2-digit'
 	});
 </script>
-
+<svelte:head>
+	<title>Home</title>
+</svelte:head>
       <!-- 1. Firebase App -->
 <FirebaseApp {firebase}>
   <User let:user let:auth let:error>
