@@ -75,9 +75,7 @@ const formatter = new Intl.DateTimeFormat('en', {
 </div>
 
   <div slot="signed-out" class="uk-position-center uk-overlay uk-overlay-default">
-    <svelte:head>
-	<title>Turnos</title>
-    </svelte:head>
+
       <Doc path={`config/first`} let:data let:ref log>
          <div slot="loading"><span uk-spinner="ratio: 4.5"></span></div>
          <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-light">
