@@ -55,7 +55,7 @@ let userPhone ="";
 </script>
 <svelte:head>
 <title>Food-App</title>
-<script src="https://www.google.com/recaptcha/api.js?render=6LeQ_bUUAAAAACds7b5onjvvWkX8cyyr6eP1iDND"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=6Lewca4ZAAAAAL1HejWYnivEDTAZtsW-XPkW0mIX"></script>
 </svelte:head>
 
 <!-- SIte Online
