@@ -5,7 +5,6 @@
   import "firebase/auth";
   import "firebase/performance";
   import "firebase/analytics";
-  const auth = firebase.auth();
   import UIkit from 'uikit';
   import Icons from 'uikit/dist/js/uikit-icons';
  
@@ -18,33 +17,9 @@
   let yes = false;
 	let selection;
 
-async function resetPassWord(email){
-  if (yes===true){
-  await UIkit.modal.confirm('Se enviara un email para restablecer la contraseña.').then(function() {
-      auth.sendPasswordResetEmail(email).then(function() {
-        UIkit.notification({
-          message: `Se ha enviado a ${email}`,
-          status: 'primary',
-          pos: 'top-right',
-          timeout: 3000
-      });
-      yes=false;
-    }).catch(function(error) {
-          UIkit.notification({
-          message: error.message,
-          status: 'danger',
-          pos: 'top-right',
-          timeout: 3000
-      });
-    });
-  }, function () {
-      console.log('Rejected.')
-      yes=false;
-  });
-  }
-}
 
-
+/*firebase auth:import (__dirname, 'users.json') --hash-algo=scrypt --rounds=8 --mem-cost=14 --hash-key=dNyCqF0j9+Ci4Q6f0Aau2V2qEQ5luG0t0vhZtke++Xl5+zM9WTcxTy9/tzEPpl4ZdLkCe9SCdCGdNWZKQP9PSQ== --salt-separator=Bw== --project=turn-app-7261d
+firebase auth:import users.json --hash-algo=scrypt --rounds=8 --mem-cost=14 --hash-key=dNyCqF0j9+Ci4Q6f0Aau2V2qEQ5luG0t0vhZtke++Xl5+zM9WTcxTy9/tzEPpl4ZdLkCe9SCdCGdNWZKQP9PSQ== --salt-separator=Bw== --project=turn-app-7261d*/
 
 
 </script>
@@ -56,7 +31,7 @@ async function resetPassWord(email){
 {:else}
 <div class="uk-clearfix">
     <div class="uk-float-left">
-     <label><input  class="uk-checkbox" bind:checked={yes} type="checkbox" value={user.email} on:change={({ target: { value } }) => resetPassWord(value)} > Restablecer contraseña.</label>
+     <label><input bind:checked={yes} class="uk-checkbox" type="checkbox" checked> Lista de usuarios.</label>
     </div>
     <div class="uk-float-right">
       
@@ -152,7 +127,12 @@ async function resetPassWord(email){
      {/each}
   </form>
 </Collection>
+{#if yes}
+  
+  <p>Cuentas de Usuario</p>
 
+
+{/if}
 {/if}
 </User>
 

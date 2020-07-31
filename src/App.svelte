@@ -5,71 +5,150 @@
   import "firebase/auth";
   import "firebase/performance";
   import "firebase/analytics";
-  import { usuario } from './Store/store.js'
-  
-  let firebaseConfig = {
-  // Your web app's Firebase configuration
-    apiKey: "AIzaSyCCOnUvMBH56Jln9imAZo1Pio2Aesh1DOA",
-    authDomain: "food-app-33495.firebaseapp.com",
-    databaseURL: "https://food-app-33495.firebaseio.com",
-    projectId: "food-app-33495",
-    storageBucket: "food-app-33495.appspot.com",
-    messagingSenderId: "1042636311170",
-    appId: "1:1042636311170:web:c96148932ff111e551c29b",
-    measurementId: "G-ZTFKMKZRD1"
-  };
+  import UIkit from 'uikit';
+  import Icons from 'uikit/dist/js/uikit-icons';
 
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCoBPU6SlKPnLBje61YtP205gdwTyGUA4M",
+    authDomain: "turn-app-7261d.firebaseapp.com",
+    databaseURL: "https://turn-app-7261d.firebaseio.com",
+    projectId: "turn-app-7261d",
+    storageBucket: "turn-app-7261d.appspot.com",
+    messagingSenderId: "247946190952",
+    appId: "1:247946190952:web:a493edf7e7b437cf421bdd",
+    measurementId: "G-2Q08RFFN8B"
+  };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 
-let isUserInLine = false;
-let userPhone ="";
-
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      var displayName = user.displayName;
-      var email = user.email;
-      var emailVerified = user.emailVerified;
-      var photoURL = user.photoURL;
-      var isAnonymous = user.isAnonymous;
-      var uid = user.uid;
-      var providerData = user.providerData;
-      var tel = user.phoneNumber;
-      console.log(tel)
-      isUserInLine = true;
-      userPhone = tel;
-      usuario.set(uid);
-    } else {
-      console.log("No User");
-      isUserInLine = false;
-    }
-  });
+	import Calendar from './Calendar.svelte';
+  import { time } from './stores.js';
+  import HorarioDeTRabajo from './_Horarios.svelte';
 
 
+ const options = [
+    {title: 'Solicitud', component: Calendar},
+    {title: 'Horario De Trabajo',component: HorarioDeTRabajo}
+  ]
 
-  import LOGIN from "./Login.svelte";
-  import HOME from "./Home.svelte";
+let value = options[0];
+let usuario;
+let clave;
 
+const formatter = new Intl.DateTimeFormat('en', {
+		hour12: true,
+		hour: 'numeric',
+		minute: '2-digit',
+		second: '2-digit'
+	});
 </script>
-<svelte:head>
-<title>Food-App</title>
-<script src="https://www.google.com/recaptcha/api.js?render=6Lewca4ZAAAAAL1HejWYnivEDTAZtsW-XPkW0mIX"></script>
-</svelte:head>
 
-<!-- SIte Online
-6Lewca4ZAAAAAL1HejWYnivEDTAZtsW-XPkW0mIX
- -->
- <!-- Localhost 
- 6LeQ_bUUAAAAACds7b5onjvvWkX8cyyr6eP1iDND
-  -->
-<!-- <span class="uk-margin-small-right" uk-spinner="ratio: 3"></span> -->
+      <!-- 1. Firebase App -->
+<FirebaseApp {firebase}>
+  <User let:user let:auth let:error>
 
-{#if !isUserInLine}
-<LOGIN/>
-{:else}
-<HOME />
-{/if}
+<!-- <li><em class="uk-text-meta">Cod. {user.uid}</em></li> -->
+<div class="uk-section-secondary uk-preserve-color">
+<div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent uk-light; top: 200">
+<nav class="uk-navbar-container" uk-navbar id="#target">
+    <div class="uk-navbar-left">
+      <ul class="uk-navbar-nav uk-margin-left ">
+          <li><a class=" uk-button-text" href="javascript:void(0)" on:click={()=>value = options[0]}> <span uk-tooltip="title: Solicitud;pos: bottom" uk-icon="calendar"></span></a></li>
+          {#if !user.isAnonymous }
+            <li><a class=" uk-button-text" href="javascript:void(0)" on:click={()=>value = options[1]}> <span class="uk-text-primary" uk-tooltip="title: Configuración;pos: bottom" uk-icon="icon: cog"></span></a></li>
+          {/if}
+      </ul>
+    </div>
+    {#if !user.isAnonymous }
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+        <li><a class=" uk-button-text" href="javascript:void(0)" on:click={() => auth.signOut()}><span uk-icon="icon: sign-out; ratio: 1.5"> Salir</span></a></li>
+        </ul>
+    </div>
+    {/if}
+</nav>
+</div>
+</div>
+
+  <div slot="signed-out" class="uk-position-center uk-overlay uk-overlay-default">
+    
+      <Doc path={`config/first`} let:data let:ref log>
+         <div slot="loading"><span uk-spinner="ratio: 4.5"></span></div>
+         <div class="uk-card uk-card-secondary uk-card-hover uk-card-body uk-light">
+           <div class="uk-card-badge"><a uk-icon="icon: lock" href="#modal-center" uk-toggle> </a></div>
+            <h3 class="uk-card-title">{formatter.format($time)}</h3>
+          {#if data.statusSite}
+            <p>{data.txtslogan}</p>
+          {:else}
+            <p>{data.txtmantenimiento}</p>
+          {/if}   
+       <div class="uk-float-right">
+        {#if data.statusSite}
+         <a class="" href="javascript:void(0)" on:click={() => auth.signInAnonymously()}><span uk-icon="icon: sign-in; ratio: 1.5"> Solicitar turno</span></a>
+        {/if}
+       </div>
+
+          <!-- Modal Login -->
+          <div id="modal-center" class="uk-flex-top" uk-modal>
+              <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical uk-width-auto">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <div class="uk-width-1-1">
+                 
+                  <form on:submit|preventDefault>
+                      <div class="uk-margin">
+                          <div class="uk-inline">
+                              <span class="uk-form-icon" uk-icon="icon: user"></span>
+                              <input bind:value={usuario} class="uk-input" type="text" placeholder="Email">
+                          </div>
+                      </div>
+                      <div class="uk-margin">
+                          <div class="uk-inline">
+                              <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                              <input class="uk-input" bind:value={clave} type="password" placeholder="Contraseña" autocomplete="password">
+                          </div>
+                      </div>
+                  <div class="uk-margin">
+                     <button class="uk-button uk-button-secondary	uk-width-1-1" uk-icon="icon: unlock"
+                      on:click={async ()=>{
+                        await auth.signInWithEmailAndPassword( `${usuario}` , `${clave}`).then(even=>{
+                          console.log("Login correcto") 
+                           UIkit.modal('#modal-center').hide().then(()=>{
+                            usuario="";
+                            clave="";
+                           })
+                        }).catch(error=>{
+                          console.log(error);
+                          var errorCode = error.code;
+                          var errorMessage = error.message;
+                               UIkit.notification({message: `<span uk-icon='icon: warning'></span> ${errorMessage}`, 
+                              pos: 'top-right', 
+                              status: 'danger',
+                              timeout: 1000
+                              })
+                        })
+                      }}></button>
+                      </div>
+                    </form>
+                </div>
+              </div>
+          </div>
+        </div>
+      </Doc>
+    
+  </div>
 
 
+
+
+<div class="uk-container">
+
+ 
+    <svelte:component this={value.component}/>
+
+</div>
+
+
+  </User>
+</FirebaseApp>
