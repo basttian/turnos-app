@@ -35,7 +35,11 @@ export default {
 			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/'),
 			mainFields: ['main', 'module']
 		}),
-		commonjs(),
+		commonjs({
+			namedExports: {
+				'node_modules/mercadopago/lib/mercadopago.js': ['mercadopago']
+			}
+		}),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
