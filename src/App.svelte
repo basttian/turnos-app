@@ -45,6 +45,11 @@ const formatter = new Intl.DateTimeFormat('en', {
 	});
 </script>
 
+<svelte:head>
+<title>Turnos</title>
+</svelte:head>
+
+
       <!-- 1. Firebase App -->
 <FirebaseApp {firebase}>
   <User let:user let:auth let:error>
